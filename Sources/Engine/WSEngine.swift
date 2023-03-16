@@ -21,7 +21,7 @@ FrameCollectorDelegate, HTTPHandlerDelegate {
     private let frameHandler = FrameCollector()
     private var didUpgrade = false
     private var secKeyValue = ""
-    private let writeQueue = DispatchQueue(label: "com.vluxe.starscream.writequeue")
+    private let writeQueue = DispatchQueue(label: "com.vluxe.starscream.writequeue", target: .global(qos: .background))
     private let mutex = DispatchSemaphore(value: 1)
     private var canSend = false
     
@@ -64,7 +64,9 @@ FrameCollectorDelegate, HTTPHandlerDelegate {
         guard let url = request.url else {
             return
         }
-        transport.connect(url: url, timeout: request.timeoutInterval, certificatePinning: certPinner)
+        transport.connect(url: url,
+                          timeout: request.timeoutInterval,
+                          certificatePinning: certPinner)
     }
     
     public func stop(closeCode: UInt16 = CloseCode.normal.rawValue) {
