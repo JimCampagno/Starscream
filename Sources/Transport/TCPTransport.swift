@@ -31,7 +31,8 @@ public enum TCPTransportError: Error {
 @available(macOS 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *)
 public class TCPTransport: Transport {
     private var connection: NWConnection?
-    private let queue = DispatchQueue(label: "com.vluxe.starscream.networkstream", attributes: [])
+    private let queue = DispatchQueue(label: "com.vluxe.starscream.networkstream",
+                                      target: .global(qos: .background))
     private weak var delegate: TransportEventClient?
     private var isRunning = false
     private var isTLS = false
@@ -152,6 +153,10 @@ public class TCPTransport: Transport {
             }
 
         })
+    }
+
+    deinit {
+        connection?.cancel()
     }
 }
 #else

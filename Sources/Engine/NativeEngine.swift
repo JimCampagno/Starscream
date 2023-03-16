@@ -114,7 +114,7 @@ public class NativeEngine: NSObject, Engine, URLSessionDataDelegate, URLSessionW
  ///          ----------------- weak ------------------
  ///
  @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
- class WebSocketDelegateProxy: NSObject, URLSessionWebSocketDelegate {
+ final class WebSocketDelegateProxy: NSObject, URLSessionWebSocketDelegate {
 
      weak var delegate: URLSessionWebSocketDelegate?
 

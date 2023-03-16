@@ -94,6 +94,7 @@ FrameCollectorDelegate, HTTPHandlerDelegate {
             let canWrite = s.canSend
             s.mutex.signal()
             if !canWrite {
+                completion?()
                 return
             }
             
@@ -105,7 +106,7 @@ FrameCollectorDelegate, HTTPHandlerDelegate {
             }
             
             let frameData = s.framer.createWriteFrame(opcode: opcode, payload: sendData, isCompressed: isCompressed)
-            s.transport.write(data: frameData, completion: {_ in
+            s.transport.write(data: frameData, completion: { _ in
                 completion?()
             })
         }
@@ -229,6 +230,9 @@ FrameCollectorDelegate, HTTPHandlerDelegate {
         didUpgrade = false
         mutex.signal()
     }
-    
+
+    deinit {
+        forceStop()
+    }
     
 }
